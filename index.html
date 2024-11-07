@@ -62,8 +62,14 @@
             resultsContainer.innerHTML = '<p class="text-center">Loading...</p>';
 
             try {
-                // Call the backend API to get recipes
+                // Fetch recipes from the backend API
                 const response = await fetch(`https://your-serverless-function-url/api/recipes?ingredients=${encodeURIComponent(ingredients)}`);
+                
+                // Check if the response is OK
+                if (!response.ok) {
+                    throw new Error('Failed to fetch recipes from backend');
+                }
+
                 const recipes = await response.json();
                 
                 if (recipes.length > 0) {
@@ -80,8 +86,8 @@
                     resultsContainer.innerHTML = '<p class="text-danger text-center">No recipes found. Try different ingredients.</p>';
                 }
             } catch (error) {
-                console.error('Error fetching recipes:', error);
-                resultsContainer.innerHTML = '<p class="text-danger text-center">An error occurred. Please try again later.</p>';
+                console.error('Error:', error);
+                resultsContainer.innerHTML = '<p class="text-danger text-center">An error occurred while fetching recipes. Please try again later.</p>';
             }
         });
     </script>
